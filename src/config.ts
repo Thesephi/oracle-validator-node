@@ -1,6 +1,8 @@
 import Big from 'big.js';
 import NearProvider from '@fluxprotocol/oracle-provider-near';
 import { config } from 'dotenv';
+import Module from '@fluxprotocol/oracle-provider-core/dist/Module';
+import HttpModule from './modules/http/NodeHttp';
 
 config();
 
@@ -26,6 +28,7 @@ export const ACTIVATED_PROVIDERS = process.env.ACTIVATED_PROVIDERS?.split(',') ?
 export const HTTP_PORT = Number(process.env.HTTP_PORT ?? 28484);
 
 export const AVAILABLE_PROVIDERS = [NearProvider];
+export const MODULES = [HttpModule];
 
 export const ENV_VARS = {
     ...process.env,

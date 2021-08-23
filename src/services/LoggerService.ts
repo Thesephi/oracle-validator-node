@@ -1,3 +1,5 @@
+import { ILogger } from '@fluxprotocol/oracle-provider-core/dist/Core';
+import Module from '@fluxprotocol/oracle-provider-core/dist/Module';
 import winston, { format } from 'winston';
 import packageJson from '../../package.json';
 
@@ -27,4 +29,13 @@ export default logger;
 export function logNodeOptions(providerRegistry: ProviderRegistry) {
     logger.info(`🤖 Starting oracle node v${packageJson.version} for ${providerRegistry.providers.map(p => p.providerName)}..`);
     logger.info(`🛠  Listening to: ${AVAILABLE_PROVIDERS.map(p => p.id).join(', ')}`);
+}
+
+export function createModuleLogger(name: string): ILogger {
+    return {
+        debug: (message: string) => logger.debug(`🔌 ${name} - ${message}`),
+        info: (message: string) => logger.info(`🔌 ${name} - ${message}`),
+        warn: (message: string) => logger.warn(`🔌 ${name} - ${message}`),
+        error: (message: string) => logger.error(`🔌 ${name} - ${message}`),
+    };
 }

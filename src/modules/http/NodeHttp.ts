@@ -1,25 +1,17 @@
-// import express from 'express';
-// import { HTTP_PORT } from '../../config';
-// import logger from '../../services/LoggerService';
-// import JobWalker from '../../core/JobWalker';
-// import StatusController from './controllers/StatusController';
-// import { NodeHttpContext } from './NodeHttpContext';
+import express from 'express';
+import activateStatusRoutes from './controllers/StatusController';
+import Module from "@fluxprotocol/oracle-provider-core/dist/Module";
 
-// export function startHttpServer(jobWalker: JobWalker) {
-//     const app = express();
+export default class HttpModule extends Module {
+    async init() {
+        const app = express();
 
-//     app.use((req, res, next) => {
-//         // @ts-ignore
-//         req.context = {
-//             jobWalker,
-//         } as NodeHttpContext;
+        activateStatusRoutes(app, this.dependencies);
 
-//         next();
-//     });
+        const httpPort = Number(this.config['HTTP_PORT'] ?? '9344');
 
-//     app.use('/status', StatusController);
-
-//     app.listen(HTTP_PORT, () => {
-//         logger.info(`🌍 HTTP listening on port ${HTTP_PORT}`);
-//     });
-// }
+        app.listen(httpPort, () => {
+            this.dependencies.logger.info(`🌍 HTTP listening on port ${httpPort}`);
+        });
+    }
+}
